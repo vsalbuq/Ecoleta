@@ -1,0 +1,14 @@
+{
+  "name": "Ecoleta",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/vsalbuq/Ecoleta.git",
+  "author": "Vinícius Albuquerque <vinicius.albuquerque@outlook.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
+}
