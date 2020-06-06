@@ -10,5 +10,15 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "scripts": {
+    "knex:migrate": "yarn workspace server knex:migrate",
+    "knex:seed": "yarn workspace server knex:seed",
+    "server-dev": "yarn workspace server dev",
+    "web-dev": "yarn workspace web start",
+    "start": "run-p server-dev web-dev"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
   }
 }
