@@ -76,16 +76,12 @@ class PointsController {
         ...point,
       });
     } catch (err) {
-      if (err.code == 'SQLITE_CONSTRAINT') {
-        return res.status(500).json({
-          message: 'Please, add an item that already exists',
-        });
-      } else {
-        return res.status(500).json({
-          message:
-            'There was an error while trying to create your waste collection point.',
-        });
-      }
+      console.log(err);
+
+      return res.status(500).json({
+        message:
+          'There was an error while trying to create your waste collection point.',
+      });
     } finally {
       await trx.commit();
     }
