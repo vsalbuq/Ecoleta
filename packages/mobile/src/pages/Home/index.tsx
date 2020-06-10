@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  ImageBackground,
-  Text,
-  Image,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import { View, ImageBackground, Text, Image, StyleSheet } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -43,7 +36,10 @@ const Home = () => {
   }, [selectedUf]);
 
   function handleNavigateToPoints() {
-    navigation.navigate('Points');
+    navigation.navigate('Points', {
+      selectedUf,
+      selectedCity,
+    });
   }
 
   return (
@@ -107,6 +103,8 @@ const dropdownStyles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 10,
     marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
   },
 });
 
