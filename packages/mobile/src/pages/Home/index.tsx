@@ -1,14 +1,46 @@
-import React from 'react';
-import { View, ImageBackground, Text, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  ImageBackground,
+  Text,
+  Image,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+
+import ibge from '../../services/ibge';
+
+import Dropdown from '../../components/Dropdown';
 
 const logo = '../../assets/logo.png';
 const background = '../../assets/home-background.png';
 
 const Home = () => {
   const navigation = useNavigation();
+  const [ufs, setUfs] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+
+  const [selectedUf, setSelectedUf] = useState('0');
+  const [selectedCity, setSelectedCity] = useState('0');
+
+  useEffect(() => {
+    ibge.getUfs().then((response) => {
+      const ufInitials = response.data.map((uf) => uf.sigla);
+
+      setUfs(ufInitials);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedUf === '0') return;
+    ibge.getCities(selectedUf).then((response) => {
+      const cityNames = response.data.map((city) => city.nome);
+      setCities(cityNames);
+    });
+  }, [selectedUf]);
 
   function handleNavigateToPoints() {
     navigation.navigate('Points');
@@ -29,6 +61,23 @@ const Home = () => {
       </View>
 
       <View style={styles.footer}>
+        <Dropdown
+          style={dropdownStyles}
+          options={ufs.map((uf) => {
+            return { label: uf, value: uf };
+          })}
+          onChange={setSelectedUf}
+          placeholder="Select a state..."
+        ></Dropdown>
+        <Dropdown
+          style={dropdownStyles}
+          options={cities.map((city) => {
+            return { label: city, value: city };
+          })}
+          onChange={setSelectedCity}
+          placeholder="Select a city..."
+        ></Dropdown>
+
         <RectButton style={styles.button} onPress={handleNavigateToPoints}>
           <View style={styles.buttonIcon}>
             <Text>
@@ -41,6 +90,25 @@ const Home = () => {
     </ImageBackground>
   );
 };
+
+const dropdownStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    height: 60,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    marginBottom: 8,
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
