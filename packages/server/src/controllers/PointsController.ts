@@ -26,7 +26,7 @@ class PointsController {
       points.map((point) => {
         return {
           ...point,
-          url_image: `http://localhost:3333/uploads/${point.image}`,
+          image_url: `http://localhost:3333/uploads/${point.image}`,
         };
       })
     );
@@ -48,7 +48,7 @@ class PointsController {
     const trx = await knex.transaction();
     try {
       const point = {
-        image: 'no-image.png',
+        image: req.file.filename,
         name,
         email,
         whatsapp,
@@ -104,7 +104,13 @@ class PointsController {
       .where('points_items.point_id', id)
       .select('items.title');
 
-    return res.json({ point, items });
+    return res.json({
+      point: {
+        ...point,
+        image_url: `http://localhost:3333/uploads/${point.image}`,
+      },
+      items,
+    });
   }
 }
 
